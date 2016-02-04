@@ -14,12 +14,12 @@ object Main {
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-    def pascal(numbers: List[Int], n: Int) : Int = {
-      if (n == r) numbers(c)
+    def pascal(numbers: List[Int], n: Int=1) : Int = {
+      if (n >= r) numbers(c)
       else pascal(1+:numbers.sliding(2).map(_.sum).toList:+1, n+1)
     }
-    if (r < 2) 1
-    else pascal(List(1, 1), 1)
+
+    pascal(List(1, 1))
   }
 
   /**
