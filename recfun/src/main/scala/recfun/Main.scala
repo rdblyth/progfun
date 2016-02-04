@@ -17,20 +17,12 @@ object Main {
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-    def pascal(row: List[Int]): Int = {
-      if (row.size - 1 == r) row(c)
-      else pascal(calculateNextRow(row))
+    def pascal(numbers: List[Int], n: Int) : Int = {
+      if (n == r) numbers(c)
+      else pascal(1+:numbers.sliding(2).map(_.sum).toList:+1, n+1)
     }
-    pascal(List(1))
-  }
-
-  def calculateNextRow(row: List[Int]): List[Int] = {
-    def calculateNextRow(row: List[Int], nextRow: List[Int]): List[Int] = {
-      if (row.size == 1) nextRow :+ 1
-      else calculateNextRow(row.tail, nextRow :+ row(0) + row(1))
-    }
-
-    calculateNextRow(row, List(1))
+    if (r < 2) 1
+    else pascal(List(1, 1), 1)
   }
 
   /**
