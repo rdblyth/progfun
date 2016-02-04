@@ -1,7 +1,4 @@
 package recfun
-import common._
-import scala.collection.mutable.ListBuffer
-import scala.collection.mutable.Stack
 
 object Main {
   def main(args: Array[String]) {
@@ -29,19 +26,14 @@ object Main {
    * Exercise 2
    */
   def balance(chars: List[Char]): Boolean = {
-    def balance(chars: List[Char], stack: Stack[Char]): Boolean = {
-      if (chars.isEmpty) return stack.isEmpty
-
-      if (chars.head == '(') {
-        stack.push('(');
-      } else if (chars.head == ')') {
-        if (stack.isEmpty) return false
-        stack.pop()
-      }
-      balance(chars.tail, stack);
-
+    def balance(chars: List[Char], stack: List[Char]): Boolean = chars match {
+      case Nil => stack.isEmpty
+      case'('::t => balance(t, '('+:stack)
+      case ')'::t if stack.isEmpty => false
+      case ')'::t => balance(t, stack.tail)
+      case _::t => balance(t, stack)
     }
-    balance(chars, Stack[Char]());
+    balance(chars, List())
   }
 
   /**
