@@ -14,7 +14,7 @@ object Main {
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-    def pascal(numbers: List[Int], n: Int=1) : Int = {
+    def pascal(numbers: List[Int], n: Int = 1) : Int = {
       if (n >= r) numbers(c)
       else pascal(1+:numbers.sliding(2).map(_.sum).toList:+1, n+1)
     }
@@ -39,5 +39,10 @@ object Main {
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = ???
+  def countChange(money: Int, coins: List[Int]): Int = {
+    if (money == 0) 1
+    else if (money < 0) 0
+    else if (money > 0 && coins.isEmpty) 0
+    else countChange(money - coins.head, coins) + countChange(money, coins.tail)
+  }
 }
