@@ -2,7 +2,6 @@ package funsets
 
 import org.scalatest.FunSuite
 
-
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
@@ -29,10 +28,10 @@ class FunSetSuite extends FunSuite {
   /**
    * Tests are written using the "test" operator and the "assert" method.
    */
-  // test("string take") {
-  //   val message = "hello, world"
-  //   assert(message.take(5) == "hello")
-  // }
+  test("string take") {
+    val message = "hello, world"
+    assert(message.take(5) == "hello")
+  }
 
   /**
    * For ScalaTest tests, there exists a special equality operator "===" that
@@ -43,10 +42,9 @@ class FunSetSuite extends FunSuite {
    * Try it out! Change the values so that the assertion fails, and look at the
    * error message.
    */
-  // test("adding ints") {
-  //   assert(1 + 2 === 3)
-  // }
-
+  test("adding ints") {
+    assert(1 + 2 === 3)
+  }
 
   import FunSets._
 
@@ -101,7 +99,7 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  test("union contains all elements of each set") {
+  test("union contains all elements") {
     new TestSets {
       val s = union(s1, s2)
       assert(contains(s, 1), "Union 1")
@@ -110,5 +108,108 @@ class FunSetSuite extends FunSuite {
     }
   }
 
+  test("union") {
+    val s = union(x => x >= 0 && x <= 10, x => x == 20)
+    assert(contains(s, 0))
+    assert(contains(s, 10))
+    assert(contains(s, 20))
+    assert(!contains(s, 11))
+  }
 
+  test("intersect no elements") {
+    new TestSets {
+      val s = intersect(s1, s2)
+      assert(!contains(s, 1), "Intersect 1")
+      assert(!contains(s, 2), "Intersect 2")
+    }
+  }
+
+  test("intersect contains common elements") {
+    val s1 = singletonSet(1)
+    val s2 = singletonSet(1)
+
+    assert(contains(intersect(s1, s2), 1), "Should contain 1 because it is in both sets")
+  }
+
+  test("diff contains only different elements") {
+    new TestSets {
+      val s = diff(s1, s2)
+      assert(contains(s, 1), "Diff 1")
+    }
+  }
+
+  test("diff contains no elements") {
+    val s1 = singletonSet(1)
+    val s2 = singletonSet(1)
+    val s = diff(s1, s2)
+    assert(!contains(s, 1), "Should not contain 1 because it is in both sets")
+  }
+
+  test("filter returns whole set") {
+    new TestSets {
+      val s = union(union(s1, s2), s3);
+      val filteredSet = filter(s, x => x >= 1)
+      assert(contains(filteredSet, 1), "Filter 1")
+      assert(contains(filteredSet, 2), "Filter 2")
+      assert(contains(filteredSet, 3), "Filter 3")
+    }
+  }
+
+  test("filter returns empty set") {
+    new TestSets {
+      val s = union(union(s1, s2), s3);
+      val filteredSet = filter(s, x => x >= 4)
+      assert(!contains(filteredSet, 1), "Filter 1")
+      assert(!contains(filteredSet, 2), "Filter 2")
+      assert(!contains(filteredSet, 3), "Filter 3")
+    }
+  }
+
+  test("filter returns part of a set set") {
+    val filteredSet = filter(x => x >= 0 && x <= 10, x => x >= 5);
+    assert(contains(filteredSet, 5), "Filter 5")
+    assert(contains(filteredSet, 10), "Filter 10")
+    assert(!contains(filteredSet, 1), "Filter 1")
+  }
+
+  test("forall returns true when predicate is satisfied") {
+    new TestSets {
+      val s = union(union(s1, s2), s3);
+      assert(forall(s, x => x > 0 && x < 4))
+    }
+  }
+
+  test("forall returns false when predicate is not satisfied") {
+    new TestSets {
+      val s = union(union(s1, s2), s3);
+      assert(!forall(s, x => x < 0))
+    }
+  }
+
+  test("exist returns true") {
+    new TestSets {
+      val s = union(union(s1, s2), s3);
+      assert(exists(s, x => x > 2))
+    }
+  }
+
+  test("exist returns false") {
+    new TestSets {
+      val s = union(union(s1, s2), s3);
+      assert(!exists(s, x => x < 0))
+    }
+  }
+
+  test("map transforms set") {
+    new TestSets {
+      val s = union(union(s1, s2), s3);
+      printSet(s)
+      val transformedSet = map(s, x => x + 10)
+      printSet(transformedSet)
+      assert(contains(transformedSet, 11))
+      assert(contains(transformedSet, 12))
+      assert(contains(transformedSet, 13))
+      assert(!contains(transformedSet, 1))
+    }
+  }
 }
