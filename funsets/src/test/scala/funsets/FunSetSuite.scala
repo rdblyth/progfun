@@ -147,7 +147,7 @@ class FunSetSuite extends FunSuite {
 
   test("filter returns whole set") {
     new TestSets {
-      val s = union(union(s1, s2), s3);
+      val s = union(union(s1, s2), s3)
       val filteredSet = filter(s, x => x >= 1)
       assert(contains(filteredSet, 1), "Filter 1")
       assert(contains(filteredSet, 2), "Filter 2")
@@ -157,7 +157,7 @@ class FunSetSuite extends FunSuite {
 
   test("filter returns empty set") {
     new TestSets {
-      val s = union(union(s1, s2), s3);
+      val s = union(union(s1, s2), s3)
       val filteredSet = filter(s, x => x >= 4)
       assert(!contains(filteredSet, 1), "Filter 1")
       assert(!contains(filteredSet, 2), "Filter 2")
@@ -166,7 +166,7 @@ class FunSetSuite extends FunSuite {
   }
 
   test("filter returns part of a set set") {
-    val filteredSet = filter(x => x >= 0 && x <= 10, x => x >= 5);
+    val filteredSet = filter(x => x >= 0 && x <= 10, x => x >= 5)
     assert(contains(filteredSet, 5), "Filter 5")
     assert(contains(filteredSet, 10), "Filter 10")
     assert(!contains(filteredSet, 1), "Filter 1")
@@ -174,38 +174,36 @@ class FunSetSuite extends FunSuite {
 
   test("forall returns true when predicate is satisfied") {
     new TestSets {
-      val s = union(union(s1, s2), s3);
+      val s = union(union(s1, s2), s3)
       assert(forall(s, x => x > 0 && x < 4))
     }
   }
 
   test("forall returns false when predicate is not satisfied") {
     new TestSets {
-      val s = union(union(s1, s2), s3);
+      val s = union(union(s1, s2), s3)
       assert(!forall(s, x => x < 0))
     }
   }
 
   test("exist returns true") {
     new TestSets {
-      val s = union(union(s1, s2), s3);
+      val s = union(union(s1, s2), s3)
       assert(exists(s, x => x > 2))
     }
   }
 
   test("exist returns false") {
     new TestSets {
-      val s = union(union(s1, s2), s3);
+      val s = union(union(s1, s2), s3)
       assert(!exists(s, x => x < 0))
     }
   }
 
   test("map transforms set") {
     new TestSets {
-      val s = union(union(s1, s2), s3);
-      printSet(s)
+      val s = union(union(s1, s2), s3)
       val transformedSet = map(s, x => x + 10)
-      printSet(transformedSet)
       assert(contains(transformedSet, 11))
       assert(contains(transformedSet, 12))
       assert(contains(transformedSet, 13))
