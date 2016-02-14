@@ -61,6 +61,27 @@ class TweetSetSuite extends FunSuite {
       assert(size(set1.union(set5)) === 4)
     }
   }
+  
+   test("union: with two empty sets") {
+    new TestSets {
+      assert(size(new Empty().union(new Empty)) === 0)
+    }
+  }
+
+  test("mostRetweeted: with empty set") {
+    new TestSets {
+      intercept[NoSuchElementException] {
+        set1.mostRetweeted;
+      }
+    }
+  }
+
+  test("mostRetweeted") {
+    new TestSets {
+      var set6 = set5.incl(new Tweet("f", "f body", 21))
+      assert(set6.mostRetweeted.retweets === 21)
+    }
+  }
 
   test("descending: set5") {
     new TestSets {
@@ -69,5 +90,4 @@ class TweetSetSuite extends FunSuite {
       assert(trends.head.user == "a" || trends.head.user == "b")
     }
   }
-
-  }
+}
