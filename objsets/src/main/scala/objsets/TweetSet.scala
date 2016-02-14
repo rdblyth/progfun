@@ -16,7 +16,7 @@ class Tweet(val user: String, val text: String, val retweets: Int) {
  * This represents a set of objects of type `Tweet` in the form of a binary search
  * tree. Every branch in the tree has two children (two `TweetSet`s). There is an
  * invariant which always holds: for every branch `b`, all elements in the left
- * subtree are smaller than the tweet at `b`. The eleemnts in the right subtree are
+ * subtree are smaller than the tweet at `b`. The elements in the right subtree are
  * larger.
  *
  * Note that the above structure requires us to be able to compare two tweets (we
@@ -54,7 +54,7 @@ abstract class TweetSet {
   /**
    * Returns a new `TweetSet` that is the union of `TweetSet`s `this` and `that`.
    *
-   * Question: Should we implment this method here, or should it remain abstract
+   * Question: Should we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
   def union(that: TweetSet): TweetSet
@@ -82,7 +82,7 @@ abstract class TweetSet {
   def descendingByRetweet: TweetList = {
     def descendingByRetweet(set: TweetSet): TweetList = {
       try {
-        def maxReTweet = set.mostRetweeted;
+        val maxReTweet = set.mostRetweeted;
         new Cons(maxReTweet, descendingByRetweet(set.remove(maxReTweet)))
       } catch {
         case ex: NoSuchElementException => Nil
@@ -144,8 +144,8 @@ class Empty extends TweetSet {
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = {
-    def leftSet = left.filterAcc(p, acc);
-    def rightSet = right.filterAcc(p, leftSet);
+    val leftSet = left.filterAcc(p, acc);
+    val rightSet = right.filterAcc(p, leftSet);
     if (p(elem)) rightSet.incl(elem)
     else rightSet
   }
@@ -155,18 +155,24 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
   }
 
   def mostRetweeted: Tweet = {
-    var leftMax = elem
-    try {
-      var leftMax = left.mostRetweeted
-    } catch {
-      case ex: NoSuchElementException =>
+    def leftMostRetweeted() = {
+      try {
+        left.mostRetweeted
+      } catch {
+        case ex: NoSuchElementException => elem
+      }
     }
-    var rightMax = elem
-    try {
-      rightMax = right.mostRetweeted
-    } catch {
-      case ex: NoSuchElementException =>
+
+    def rightMostRetweeted = {
+      try {
+        right.mostRetweeted
+      } catch {
+        case ex: NoSuchElementException => elem
+      }
     }
+
+    val leftMax = leftMostRetweeted
+    val rightMax = rightMostRetweeted
 
     if (leftMax.retweets > rightMax.retweets) leftMax
     else rightMax
@@ -224,11 +230,11 @@ object GoogleVsApple {
   val google = List("android", "Android", "galaxy", "Galaxy", "nexus", "Nexus")
   val apple = List("ios", "iOS", "iphone", "iPhone", "ipad", "iPad")
 
-  lazy val googleTweets: TweetSet = TweetReader.allTweets.filter { tw => contains(tw, google) }
+  lazy val googleTweets: TweetSet = TweetReader.allTweets.filter(contains(_, google))
 
-  lazy val appleTweets: TweetSet = TweetReader.allTweets.filter { tw => contains(tw, apple) }
+  lazy val appleTweets: TweetSet = TweetReader.allTweets.filter(contains(_, apple))
 
-  def contains(tw: Tweet, keyWords: List[String]) = keyWords.exists(word => tw.text.contains(word))
+  def contains(tw: Tweet, keyWords: List[String]) = keyWords.exists(tw.text.contains(_))
 
   /**
    * A list of all tweets mentioning a keyword from either apple or google,
