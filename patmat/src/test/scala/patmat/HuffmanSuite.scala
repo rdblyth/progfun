@@ -42,9 +42,37 @@ class HuffmanSuite extends FunSuite {
     assert(makeOrderedLeafList(List(('t', 2), ('e', 1), ('x', 3))) === List(Leaf('e',1), Leaf('t',2), Leaf('x',3)))
   }
 
+  test("singleton returns true if a List[Tree] contains a single tree") {
+    assert(singleton(List(Leaf('e', 1))) == true)
+  }
+
+  test("singleton returns false if a List[Tree] contains more than one tree") {
+    assert(singleton(List(Leaf('e', 1), Leaf('t', 2))) == false)
+  }
+
   test("combine of some leaf list") {
     val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
     assert(combine(leaflist) === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
+  }
+
+  test("combine with List less than two elements returns List unchanged") {
+    val leaflist = List(Leaf('e', 1))
+    assert(combine(leaflist) == leaflist)
+  }
+
+  test("until should combine trees and return a single tree") {
+    val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
+    val singleTree = until(singleton, combine)(leaflist)
+    assert(singleton((singleTree)))
+
+    singleTree(0) match {
+      case Fork(left, right, c, weight) => {
+        assert(c == List('e','t', 'x'))
+        assert(weight == 7)
+        assert(chars(left) == List('e','t'))
+        assert(chars(right) == List('x'))
+      }
+    }
   }
 
   test("decode and encode a very short text should be identity") {
