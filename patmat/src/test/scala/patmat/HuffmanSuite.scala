@@ -60,6 +60,19 @@ class HuffmanSuite extends FunSuite {
     assert(combine(leaflist) == leaflist)
   }
 
+  test("createCodeTree creates a Huffman Tree from a List[Char]") {
+    val tree = createCodeTree(List('e','t','t','x','x','x','x'))
+
+    tree match {
+      case Fork(left, right, c, weight) => {
+        assert(c == List('e','t', 'x'))
+        assert(weight == 7)
+        assert(chars(left) == List('e','t'))
+        assert(chars(right) == List('x'))
+      }
+    }
+  }
+
   test("until should combine trees and return a single tree") {
     val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
     val singleTree = until(singleton, combine)(leaflist)
