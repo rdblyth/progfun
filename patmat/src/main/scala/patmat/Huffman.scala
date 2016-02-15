@@ -142,7 +142,10 @@ object Huffman {
    * The parameter `chars` is an arbitrary text. This function extracts the character
    * frequencies from that text and creates a code tree based on them.
    */
-  def createCodeTree(chars: List[Char]): CodeTree = ???
+  def createCodeTree(chars: List[Char]): CodeTree =  {
+    val leafs = makeOrderedLeafList(times(chars))
+    until(singleton, combine)(leafs)(0)
+  }
   
 
   // Part 3: Decoding
@@ -164,7 +167,7 @@ object Huffman {
 
   /**
    * What does the secret message say? Can you decode it?
-   * For the decoding use the `frenchCode' Huffman tree defined above.
+   * For the decoding use the 'frenchCode' Huffman tree defined above.
    */
   val secret: List[Bit] = List(0,0,1,1,1,0,1,0,1,1,1,0,0,1,1,0,1,0,0,1,1,0,1,0,1,1,0,0,1,1,1,1,1,0,1,0,1,1,0,0,0,0,1,0,1,1,1,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,1)
 
