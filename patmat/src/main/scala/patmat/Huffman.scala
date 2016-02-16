@@ -86,7 +86,8 @@ object Huffman {
    * of a leaf is the frequency of the character.
    */
   def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] =  {
-    freqs.sortWith((f1,f2) => f1._2 < f2._2).map(f => Leaf(f._1, f._2))
+    val sortedFreqs = freqs.sortWith((f1,f2) => f1._2 < f2._2)
+    sortedFreqs.map(f => Leaf(f._1, f._2))
   }
   
   /**
@@ -156,7 +157,21 @@ object Huffman {
    * This function decodes the bit sequence `bits` using the code tree `tree` and returns
    * the resulting list of characters.
    */
-  def decode(tree: CodeTree, bits: List[Bit]): List[Char] = ???
+  def decode(tree: CodeTree, bits: List[Bit]): List[Char] =  {
+    def decode(currentNode: CodeTree, bits: List[Bit], chars: List[Char]) : List[Char] = {
+      currentNode match {
+        case Leaf(char, _) => {
+          if (bits.isEmpty) chars:+char
+          else decode(tree, bits, chars:+char)
+        }
+        case Fork(left, right, _, _) => {
+          if (bits.head == 0) decode(left, bits.tail, chars)
+          else decode(right, bits.tail, chars)
+        }
+      }
+    }
+    decode(tree, bits, List())
+  }
   
   /**
    * A Huffman coding tree for the French language.
@@ -174,7 +189,7 @@ object Huffman {
   /**
    * Write a function that returns the decoded secret
    */
-  def decodedSecret: List[Char] = ???
+  def decodedSecret: List[Char] = decode(frenchCode, secret)
   
 
   // Part 4a: Encoding using Huffman tree
@@ -183,7 +198,22 @@ object Huffman {
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
    */
-  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+    def encode(currentNode: CodeTree, text: List[Char], bits: List[Bit]) : List[Bit] = {
+      currentNode match {
+        case Leaf(char, _) => {
+          if (text.isEmpty) bits
+          else encode(tree, text, bits)
+        }
+        case Fork(left, right, _, _) => {
+          if (chars(left).contains(text.head)) encode(left, text.tail, bits:+0)
+          else encode(left, text.tail, bits:+1)
+        }
+      }
+    }
+
+    encode(tree, text, List())
+  }
   
   // Part 4b: Encoding using code table
 
