@@ -61,7 +61,7 @@ class HuffmanSuite extends FunSuite {
   }
 
   test("createCodeTree creates a Huffman Tree from a List[Char]") {
-    val tree = createCodeTree(List('e','t','t','x','x','x','x'))
+    val tree = createCodeTree("ettxxxx".toList)
 
     tree match {
       case Fork(left, right, c, weight) => {
@@ -85,6 +85,22 @@ class HuffmanSuite extends FunSuite {
         assert(chars(left) == List('e','t'))
         assert(chars(right) == List('x'))
       }
+    }
+  }
+
+  test("decode decodes a List[Bit] to a List[Char") {
+    new TestTrees {
+      assert(decode(t1, List(0, 1)) == List('a', 'b'))
+    }
+  }
+
+  test("decode secret") {
+    assert(decodedSecret.mkString == "huffmanestcool")
+  }
+
+  test("encode encodes a List[Char] to List[Bit]") {
+    new TestTrees {
+      assert(encode(t1)("ab".toList) == List(0, 1))
     }
   }
 
