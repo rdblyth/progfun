@@ -16,7 +16,11 @@ object Main {
   def pascal(c: Int, r: Int): Int = {
     def pascal(numbers: List[Int], n: Int = 1) : Int = {
       if (n >= r) numbers(c)
-      else pascal(1+:numbers.sliding(2).map(_.sum).toList:+1, n+1)
+      else pascal(1+:calculateInteriorNumbers(numbers):+1, n+1)
+    }
+
+    def calculateInteriorNumbers(row: List[Int]) = {
+      row.sliding(2).map(_.sum).toList
     }
 
     pascal(List(1, 1))
