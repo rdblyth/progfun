@@ -200,7 +200,7 @@ object Huffman {
       }
       case Fork(left, right, _, _) => {
         if (chars(left).contains(text.head)) encode(left, text, bits:+0)
-        else encode(left, text, bits:+1)
+        else encode(right, text, bits:+1)
       }
     }
 
