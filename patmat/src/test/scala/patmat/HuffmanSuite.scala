@@ -44,4 +44,33 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+
+  test("decode secret") {
+    assert(decodedSecret === List('h', 'u', 'f', 'f', 'm', 'a', 'n', 'e', 's', 't', 'c', 'o', 'o', 'l'))
+  }
+
+  test("codeBits returns the bit sequence respresenting a character") {
+    val codeTable = List(('a', List(0,0)), ('b', List(0,1)), ('d', List(1)))
+    assert(codeBits(codeTable)('a') === List(0,0))
+  }
+
+  test("mergeCodeTables merges two CodeTables toghether") {
+    val table1 = List(('a', List(0)))
+    val table2 = List(('b', List(1)))
+    val mergedTable = List(('a', List(0)), ('b', List(1)))
+    assert(mergeCodeTables(table1, table2) == mergedTable)
+  }
+
+  test("convert converts a CodeTree to a CodeTable") {
+    new TestTrees {
+      val codeTable = List(('a', List(0,0)), ('b', List(0,1)), ('d', List(1)))
+      assert(convert(t2) === codeTable)
+    }
+  }
+
+  test("quickEncode encodes text from a code tree") {
+    new TestTrees {
+      assert(quickEncode(t2)(List('a','b')) === List(0,0,0,1))
+    }
+  }
 }
