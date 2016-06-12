@@ -46,7 +46,7 @@ class HuffmanSuite extends FunSuite {
   }
 
   test("decode secret") {
-    assert(decodedSecret === List('h', 'u', 'f', 'f', 'm', 'a', 'n', 'e', 's', 't', 'c', 'o', 'o', 'l'))
+    assert(decodedSecret === "huffmanestcool".toList)
   }
 
   test("codeBits returns the bit sequence respresenting a character") {
